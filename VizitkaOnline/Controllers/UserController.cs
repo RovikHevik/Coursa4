@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 
 namespace VizitkaOnline.Controllers
 {
@@ -12,9 +13,19 @@ namespace VizitkaOnline.Controllers
         {
             return View();
         }
+        public IActionResult ForgetPassword()
+        {
+            return View();
+        }
         public IActionResult UserCabinet()
         {
             return View();
+        }
+
+        [HttpPost]
+        public IActionResult Registration(List<string> regData)
+        {
+            return View("UserCabinet");
         }
     }
 }

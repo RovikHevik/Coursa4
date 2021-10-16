@@ -4,9 +4,35 @@ a.navbar-brand {
   text-align: center;
   word-break: break-all;
 }
+.main-title {
+    display: flex;
+    justify-content: center;
+}
+
+.text-header-post {
+    text-align:center;
+}
+
+.row {
+    margin-top: 10px;
+}
+
+.no-wrap{
+    flex-wrap:nowrap;
+    padding:0;
+}
+
+.img-list{
+    margin:0;
+    padding:0;
+}
+
+.auto-padding{
+    vertical-align:middle;
+}
 
 a {
-  color: #0366d6;
+    color: #0366d6;
 }
 
 .btn-primary {
@@ -21,6 +47,7 @@ a {
   border-color: #1861ac;
 }
 
+
 html {
   font-size: 14px;
 }
@@ -29,6 +56,7 @@ html {
     font-size: 16px;
   }
 }
+
 
 .border-top {
   border-top: 1px solid #e5e5e5;
@@ -55,9 +83,9 @@ body {
   margin-bottom: 60px;
 }
 .footer {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  white-space: nowrap;
-  line-height: 60px; 
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    white-space: nowrap;
+    line-height: 60px;
 }
