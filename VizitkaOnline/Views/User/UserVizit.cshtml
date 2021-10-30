@@ -1,6 +1,6 @@
 ﻿@model UserModel
 @{
-    ViewData["Title"] = "Личный кабинет";
+    ViewData["Title"] = @Model.FirstName;
 }
 
 <a asp-action="Registration">Добавить пользователя</a>
