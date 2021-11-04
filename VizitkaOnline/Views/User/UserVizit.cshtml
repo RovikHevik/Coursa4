@@ -1,11 +1,4 @@
-﻿@model UserModel
+﻿@model AccountModel
 @{
-    ViewData["Title"] = @Model.FirstName;
+    ViewData["Title"] = @Model.FullName;
 }
-
-<a asp-action="Registration">Добавить пользователя</a>
-<table class="table">
-    <tr><td>id</td><td>Логин</td><td>Имя</td><td>Фамилия</td><td>Почта</td><td>Пароль</td></tr>
-    <tr><td>@Model.id</td><td>@Model.Login</td><td>@Model.FirstName</td><td>@Model.LastName</td><td>@Model.Email</td><td>@Model.PasswordHash</td></tr>
-    
-</table>

@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using VizitkaOnline.Logic;
 using VizitkaOnline.Models;
 
 namespace VizitkaOnline.Controllers
@@ -37,12 +38,17 @@ namespace VizitkaOnline.Controllers
         /// </summary>
         /// <param name="login">Логин пользователя которого надо выдать</param>
         /// <returns></returns>
-        [HttpGet("/user/{login}")]
+        [HttpGet("/user/get/{login}")]
         public IActionResult UserVizit(string login)
         {
-            return View(db.userModel.Where(u => u.Login.Contains(login)).First());
+            return View(db.accountModel.Where(u => u.Login.Contains(login)).First());
         }
 
+        /// <summary>
+        /// Метод авторизации
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
         public IActionResult CheckUser(UserModel user)
         {
             if (db.userModel.Where(l => l.PasswordHash.Contains(user.PasswordHash) && l.Login.Contains(user.Login)).Count() == 0)
@@ -50,13 +56,16 @@ namespace VizitkaOnline.Controllers
                 TempData["MessageErrorInput"] = "Введенный пароль не верный.";
                 return RedirectToAction("Login", TempData);
             }
-            TempData["Login"] = user.Login;
+            AccountLogic account = new AccountLogic();
+            account.SetCookies(HttpContext, user.Login);
             return RedirectToAction("UserCabinet");
         }
 
         public IActionResult UserCabinet()
         {
-            return View(db.userModel.Where(u => u.Login.Contains((string)TempData["Login"])).First());
+            AccountLogic account = new AccountLogic();
+            string login = account.GetCookies(HttpContext);
+            return View(db.accountModel.Where(u => u.Login.Contains(login)).First());
         }
 
 
@@ -68,7 +77,8 @@ namespace VizitkaOnline.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(UserModel user)
         {
-            if (user.Login == null || user.PasswordHash == null || user.Email == null || user.FirstName == null)
+            
+            if (user.Login == null || user.PasswordHash == null || user.Email == null || user.FirstName == null || user.LastName == null)
             {
                 TempData["MessageErrorInput"] = "Ошибка ввода данных. Пустые поля";
                 return RedirectToAction("Registration", TempData);
@@ -78,9 +88,15 @@ namespace VizitkaOnline.Controllers
                 TempData["MessageErrorInput"] = "Данное имя занято, попробуйте другое";
                 return RedirectToAction("Registration", TempData);
             }
+            AccountLogic account        = new AccountLogic();
+            AccountModel accountModel   = new AccountModel();
+            accountModel.id             = user.id;
+            accountModel.Login          = user.Login;           
+            accountModel.FullName       = user.FirstName + " " + user.LastName; 
+            db.accountModel.Add(accountModel);
             db.userModel.Add(user);
             await db.SaveChangesAsync();
-            TempData["Login"] = user.Login;
+            account.SetCookies(HttpContext, user.Login);
             return RedirectToAction("UserCabinet");
         }
     }
