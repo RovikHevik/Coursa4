@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using VizitkaOnline.Logic;
 using VizitkaOnline.Models;
 
 namespace VizitkaOnline.Controllers
@@ -20,17 +21,23 @@ namespace VizitkaOnline.Controllers
 
         public IActionResult Index()
         {
+            AccountLogic logic = new AccountLogic();
+            ViewBag.Login = logic.GetCookies(HttpContext);
             return View();
         }
 
         public IActionResult AboutUs()
         {
+            AccountLogic logic = new AccountLogic();
+            ViewBag.Login = logic.GetCookies(HttpContext);
             return View();
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
+            AccountLogic logic = new AccountLogic();
+            ViewBag.Login = logic.GetCookies(HttpContext);
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
     }

@@ -26,6 +26,8 @@ namespace VizitkaOnline
             // получаем строку подключения из файла конфигурации
             string connection = Configuration.GetConnectionString("DefaultConnection");
 
+            services.AddSession(s => s.IdleTimeout = TimeSpan.FromMinutes(30));
+
             services.AddDbContext<ApplicationContext>(options =>
                 options.UseSqlServer(connection));
             services.AddControllersWithViews()
@@ -34,6 +36,8 @@ namespace VizitkaOnline
                     .AddSessionStateTempDataProvider();
 
             services.AddDistributedMemoryCache();
+
+            services.AddMvcCore();
 
             services.AddSession();
         }
@@ -56,7 +60,9 @@ namespace VizitkaOnline
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
+
             app.UseSession();
 
             app.UseEndpoints(endpoints =>
