@@ -92,3 +92,12 @@ body {
     white-space: nowrap;
     line-height: 60px;
 }
+
+.main-container-form {
+    background: linear-gradient(0deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)), linear-gradient(289.05deg, #00FFC2 3.82%, rgba(0, 0, 0, 0) 97.82%), linear-gradient(109.61deg, #DB00FF 8.53%, rgba(255, 255, 255, 0) 99.37%);
+    border-radius: 16px;
+}
+
+.img-border-radius-100{
+    border-radius:1000px;
+}

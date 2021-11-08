@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
+using System.Text.Json;
 using System.Threading.Tasks;
 using VizitkaOnline.Logic;
 using VizitkaOnline.Models;
@@ -44,6 +45,12 @@ namespace VizitkaOnline.Controllers
             return View(db.accountModel.Where(u => u.Login.Contains(login)).First());
         }
 
+        [HttpGet("/user/api/{login}")]
+        public string ApiUser(string login)
+        {
+            return JsonSerializer.Serialize(db.userModel.Where(u => u.Login.Contains(login)).First());
+        }
+
         /// <summary>
         /// Метод авторизации
         /// </summary>
@@ -65,6 +72,7 @@ namespace VizitkaOnline.Controllers
         {
             AccountLogic account = new AccountLogic();
             string login = account.GetCookies(HttpContext);
+            ViewBag.Login = login;
             return View(db.accountModel.Where(u => u.Login.Contains(login)).First());
         }
 
@@ -92,11 +100,30 @@ namespace VizitkaOnline.Controllers
             AccountModel accountModel   = new AccountModel();
             accountModel.id             = user.id;
             accountModel.Login          = user.Login;           
-            accountModel.FullName       = user.FirstName + " " + user.LastName; 
+            accountModel.FullName       = user.FirstName + " " + user.LastName;
+            accountModel.UserPicture = "/img/default_av.jpg";
             db.accountModel.Add(accountModel);
             db.userModel.Add(user);
             await db.SaveChangesAsync();
             account.SetCookies(HttpContext, user.Login);
+            return RedirectToAction("UserCabinet");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UpdateAccountInfo(AccountModel model)
+        {
+            AccountLogic account = new AccountLogic();
+            string login = account.GetCookies(HttpContext);
+            ViewBag.Login = login;
+            var old = db.accountModel.FirstOrDefault(ac => ac.Login.Contains(login));
+            old.FullName = model.FullName;
+            old.FaceBook = model.FaceBook;
+            old.UserPicture = model.UserPicture;
+            old.Telegram = model.Telegram;
+            old.Monobank = model.Monobank;
+            old.Instagram = model.Instagram;
+            old.Phone = model.Phone;
+            await db.SaveChangesAsync();
             return RedirectToAction("UserCabinet");
         }
     }
