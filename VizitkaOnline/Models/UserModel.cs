@@ -15,7 +15,7 @@
 
             set
             {
-                passwordHash = new PasswordHashModel().HashPassword(value);
+                passwordHash = HashModel.Sha256Hash(value);
             }
         }
     }

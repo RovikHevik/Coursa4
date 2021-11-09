@@ -21,23 +21,20 @@ namespace VizitkaOnline.Controllers
 
         public IActionResult Index()
         {
-            AccountLogic logic = new AccountLogic();
-            ViewBag.Login = logic.GetCookies(HttpContext);
+            ViewBag.Login = CookiesLogic.GetCookies(HttpContext);
             return View();
         }
 
         public IActionResult AboutUs()
         {
-            AccountLogic logic = new AccountLogic();
-            ViewBag.Login = logic.GetCookies(HttpContext);
+            ViewBag.Login = CookiesLogic.GetCookies(HttpContext);
             return View();
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
-            AccountLogic logic = new AccountLogic();
-            ViewBag.Login = logic.GetCookies(HttpContext);
+            ViewBag.Login = CookiesLogic.GetCookies(HttpContext);
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
     }
