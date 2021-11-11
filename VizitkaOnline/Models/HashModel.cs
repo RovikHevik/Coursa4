@@ -11,7 +11,7 @@ namespace VizitkaOnline.Models
 
         public static string Sha256Hash(string inputWord)
         {
-            StringBuilder stringBuilder = new StringBuilder();
+            StringBuilder stringBuilder = new();
             using (HashAlgorithm algorithm = SHA256.Create())
             {
                 tempHash = algorithm.ComputeHash(Encoding.UTF8.GetBytes(inputWord));

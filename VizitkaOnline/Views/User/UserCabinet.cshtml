@@ -4,17 +4,30 @@
 }
 
 
- <div class="container justify-content-center align-items-center display-flex main-container-form">
-        <main role="main" class="pb-3">
-            <form method="post" class="col-sm col-sm-pull" asp-action="UpdateAccountInfo" asp-controller="User">
-                   <div class="form-group row justify-content-center">
+ <div class="container justify-content-center align-items-center display-flex ">
+        <main role="main" class="pb-3 main-container-form">
+            <form asp-action="AddFile" asp-controller="User" method="post" enctype="multipart/form-data">
+                 <div class="form-group row justify-content-center py-auto">
                        <div class="col-sm-6">
-                           <img src="@Model.UserPicture" class="img-fluid img-border-radius-100"/>
+                           <img src="@Model.UserPicture" onerror="this.onerror=null; this.src='/img/default_av.jpg'" width="200" class="img-fluid img-border-radius-10"/>
                        </div>
                         <div class="col-sm-6">
-                          <input type="file" class="form-control" asp-for="Picture" id="inputEmail" runat="server">
+                            <dl>
+                                <dt>
+                                    <label asp-for="Picture"></label>
+                                </dt>
+                                <dd>
+                                    <label class="custom-file-upload">
+                                        <input type="file" name="uploadedFile"/>
+                                        <i class="fa fa-cloud-upload"></i> Выбрать файл
+                                    </label>
+                                    <input type="submit" title="Обновить фото профиля" class="btn btn-primary"/>
+                                </dd>
+                            </dl>
                         </div>
                   </div>            
+            </form>
+            <form method="post" class="col-sm col-sm-pull" asp-action="UpdateAccountInfo" asp-controller="User">                 
                   <div class="form-group row justify-content-center">                    
                         <div class="col-sm-12">
                           <input type="text" class="form-control" value="@Model.FullName" asp-for="FullName" id="inputEmail" placeholder="Имя">

@@ -1,9 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Linq;
-using System.Text.Json;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using VizitkaOnline.AppData;
 using VizitkaOnline.Logic;
 using VizitkaOnline.Models;
@@ -15,9 +12,12 @@ namespace VizitkaOnline.Controllers
 
         private ApplicationContext Db { get; set; }
 
-        public UserController(ApplicationContext applicationContext)
+        readonly IWebHostEnvironment _appEnvironment;
+
+        public UserController(ApplicationContext applicationContext, IWebHostEnvironment webHostEnvironment)
         {
             Db = applicationContext;
+            _appEnvironment = webHostEnvironment;
         }
 
         public IActionResult Registration()
@@ -89,6 +89,13 @@ namespace VizitkaOnline.Controllers
             string login = CookiesLogic.GetCookies(HttpContext);
             ViewBag.Login = login;
             DataLogic.UpdateDB(login, model);
+            return RedirectToAction("UserCabinet");
+        }
+
+        [HttpPost]
+        public IActionResult AddFile(IFormFile uploadedFile)
+        {
+            Logic.DataLogic.SaveImage(uploadedFile, Logic.CookiesLogic.GetCookies(HttpContext), _appEnvironment);
             return RedirectToAction("UserCabinet");
         }
     }

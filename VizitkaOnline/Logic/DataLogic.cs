@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -63,18 +64,14 @@ namespace VizitkaOnline.Logic
         public async static void UpdateDB(string login, AccountModel model)
         {
             using ApplicationContext db = new();
-            var old = GetAccountModel(login);
+            AccountModel old = db.AccountModel.Where(ac => ac.Login == login).FirstOrDefault();
             old.FullName = model.FullName;
             old.FaceBook = model.FaceBook;
             old.Telegram = model.Telegram;
             old.Monobank = model.Monobank;
             old.Instagram = model.Instagram;
             old.Phone = model.Phone;
-            if(model.Picture != null)
-            {
-                SaveImage(model.Picture, login);
-            }
-            old.UserPicture = Environment.CurrentDirectory + "/img/" + HashModel.Sha256Hash(old.Login) + ".jpg";
+            old.UserPicture = "/img/" + old.Login + ".jpg";
             await db.SaveChangesAsync();
         }
 
@@ -99,12 +96,17 @@ namespace VizitkaOnline.Logic
             db.AccountModel.Add(model);
             await db.SaveChangesAsync();
         }
-        public static void SaveImage(IFormFile postedFiles, string login)
+        public static void SaveImage(IFormFile postedFiles, string login, IWebHostEnvironment _appEnvironment)
         {
-
-            string path = "img/" + HashModel.Sha256Hash(login) + ".jpg";
-            FileStream stream = new FileStream(path, FileMode.Create);
-            postedFiles.CopyTo(stream);
+            if (postedFiles != null)
+            {
+                string path = "/img/" + login + ".jpg";
+                using (var fileStream = new FileStream(_appEnvironment.WebRootPath + path, FileMode.Create))
+                {
+                    postedFiles.CopyToAsync(fileStream);
+                }
+                UpdateDB(login, GetAccountModel(login));
+            }
         }
 
     }
