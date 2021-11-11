@@ -1,14 +1,7 @@
-﻿using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
+﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Net.Http.Headers;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
+using VizitkaOnline.AppData;
 using VizitkaOnline.Logic;
 using VizitkaOnline.Models;
 
@@ -17,11 +10,14 @@ namespace VizitkaOnline.Controllers
     public class UserController : Controller
     {
 
-        private ApplicationContext db { get; set; }
+        private ApplicationContext Db { get; set; }
 
-        public UserController(ApplicationContext applicationContext)
+        readonly IWebHostEnvironment _appEnvironment;
+
+        public UserController(ApplicationContext applicationContext, IWebHostEnvironment webHostEnvironment)
         {
-            db = applicationContext;
+            Db = applicationContext;
+            _appEnvironment = webHostEnvironment;
         }
 
         public IActionResult Registration()
@@ -41,7 +37,7 @@ namespace VizitkaOnline.Controllers
         [HttpGet("/user/get/{login}")]
         public IActionResult UserVizit(string login)
         {
-            return View(db.accountModel.Where(u => u.Login.Contains(login)).First());
+            return View(DataLogic.GetAccountModel(login));
         }
 
         /// <summary>
@@ -51,21 +47,20 @@ namespace VizitkaOnline.Controllers
         /// <returns></returns>
         public IActionResult CheckUser(UserModel user)
         {
-            if (db.userModel.Where(l => l.PasswordHash.Contains(user.PasswordHash) && l.Login.Contains(user.Login)).Count() == 0)
+            if (DataLogic.LoginUser(user) != "")
             {
-                TempData["MessageErrorInput"] = "Введенный пароль не верный.";
+                TempData["MessageErrorInput"] = DataLogic.LoginUser(user);
                 return RedirectToAction("Login", TempData);
             }
-            AccountLogic account = new AccountLogic();
-            account.SetCookies(HttpContext, user.Login);
+            CookiesLogic.SetCookies(HttpContext, user.Login);
             return RedirectToAction("UserCabinet");
         }
 
         public IActionResult UserCabinet()
         {
-            AccountLogic account = new AccountLogic();
-            string login = account.GetCookies(HttpContext);
-            return View(db.accountModel.Where(u => u.Login.Contains(login)).First());
+            string login = CookiesLogic.GetCookies(HttpContext);
+            ViewBag.Login = login;
+            return View(DataLogic.GetAccountModel(login));
         }
 
 
@@ -75,28 +70,32 @@ namespace VizitkaOnline.Controllers
         /// <param name="user"> UserModel аутификации</param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<IActionResult> Create(UserModel user)
+        public IActionResult Create(UserModel user)
         {
             
-            if (user.Login == null || user.PasswordHash == null || user.Email == null || user.FirstName == null || user.LastName == null)
+            if (DataLogic.CheckNotNull(user) != "")
             {
-                TempData["MessageErrorInput"] = "Ошибка ввода данных. Пустые поля";
+                TempData["MessageErrorInput"] = DataLogic.CheckNotNull(user);
                 return RedirectToAction("Registration", TempData);
             }
-            if(db.userModel.Where(l => l.Login.Contains(user.Login)).Count() > 0)
-            {
-                TempData["MessageErrorInput"] = "Данное имя занято, попробуйте другое";
-                return RedirectToAction("Registration", TempData);
-            }
-            AccountLogic account        = new AccountLogic();
-            AccountModel accountModel   = new AccountModel();
-            accountModel.id             = user.id;
-            accountModel.Login          = user.Login;           
-            accountModel.FullName       = user.FirstName + " " + user.LastName; 
-            db.accountModel.Add(accountModel);
-            db.userModel.Add(user);
-            await db.SaveChangesAsync();
-            account.SetCookies(HttpContext, user.Login);
+            DataLogic.WriteToDb(user);
+            CookiesLogic.SetCookies(HttpContext, user.Login);
+            return RedirectToAction("UserCabinet");
+        }
+
+        [HttpPost]
+        public IActionResult UpdateAccountInfo(AccountModel model)
+        {
+            string login = CookiesLogic.GetCookies(HttpContext);
+            ViewBag.Login = login;
+            DataLogic.UpdateDB(login, model);
+            return RedirectToAction("UserCabinet");
+        }
+
+        [HttpPost]
+        public IActionResult AddFile(IFormFile uploadedFile)
+        {
+            Logic.DataLogic.SaveImage(uploadedFile, Logic.CookiesLogic.GetCookies(HttpContext), _appEnvironment);
             return RedirectToAction("UserCabinet");
         }
     }

@@ -1,15 +1,11 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using VizitkaOnline.Models;
+using VizitkaOnline.AppData;
 
 namespace VizitkaOnline
 {
@@ -23,13 +19,10 @@ namespace VizitkaOnline
         public IConfiguration Configuration { get; }
          public void ConfigureServices(IServiceCollection services)
         {
-            // получаем строку подключения из файла конфигурации
-            string connection = Configuration.GetConnectionString("DefaultConnection");
 
             services.AddSession(s => s.IdleTimeout = TimeSpan.FromMinutes(30));
 
-            services.AddDbContext<ApplicationContext>(options =>
-                options.UseSqlServer(connection));
+            services.AddDbContext<ApplicationContext>();
             services.AddControllersWithViews()
                     .AddSessionStateTempDataProvider();
             services.AddRazorPages()

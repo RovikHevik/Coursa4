@@ -5,16 +5,16 @@ using System.Text;
 
 namespace VizitkaOnline.Models
 {
-    public class PasswordHashModel
+    public static class HashModel
     {
         private static byte[] tempHash;
 
-        public string HashPassword(string password)
+        public static string Sha256Hash(string inputWord)
         {
-            StringBuilder stringBuilder = new StringBuilder();
+            StringBuilder stringBuilder = new();
             using (HashAlgorithm algorithm = SHA256.Create())
             {
-                tempHash = algorithm.ComputeHash(Encoding.UTF8.GetBytes(password));
+                tempHash = algorithm.ComputeHash(Encoding.UTF8.GetBytes(inputWord));
             }
             foreach (var tempByte in tempHash)
             {
