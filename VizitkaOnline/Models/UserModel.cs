@@ -1,4 +1,6 @@
-﻿namespace VizitkaOnline.Models
+﻿using VizitkaOnline.Logic;
+
+namespace VizitkaOnline.Models
 {
     public class UserModel : BaseAccountModel
     {
@@ -15,7 +17,7 @@
 
             set
             {
-                passwordHash = HashModel.Sha256Hash(value);
+                passwordHash = DataLogic.Sha256Hash(value);
             }
         }
     }

@@ -1,4 +1,51 @@
 ﻿@model AccountModel
 @{
-    ViewData["Title"] = @Model.FullName;
+ViewData["Title"] = @Model.FullName;
 }
+<div class="container vizit-back main-container-vizit-form">
+	<div class="row justify-content-center">
+		<div class="h4">
+			@Model.FullName
+		</div>
+	</div>
+	<div class="row justify-content-center">
+		<img src="@Model.UserPicture"  onerror="this.onerror=null; this.src='/img/default_av.jpg'" width="200" class="vizit-avatar"/>
+	</div>
+	<div class="container main-link-container">
+		@if(Model.Phone != null)
+		{
+			<div class="row justify-content-center">
+			 <a href="tel:@Model.Phone">Нажми чтобы позвонить</a>
+			</div>
+		}
+		<div class="row justify-content-center">
+			 Ссылки на меня <img src="https://emojio.ru/images/apple-b/1f447.png" width="20px"/>
+		</div>
+		<div class="row justify-content-around">
+			@if (Model.Telegram != null)
+			{
+				<div class="col-6">
+					<a href="@Model.Telegram"><img src="~/img/telegram.png"/></a>
+			</div>
+			}
+			@if (Model.Instagram != null)
+			{
+				<div class="col-6">
+					<a href="@Model.Instagram"><img src="~/img/instagram.png"/></a>
+			</div>
+			}
+			@if (@Model.Monobank != null)
+			{
+
+				<div class="col-6">
+					<a href="@Model.Monobank"><img src="~/img/monobank.png"/></a>
+			</div>
+			}
+			@if (Model.FaceBook != null)
+			{
+				<div class="col-6">
+					<a href="@Model.FaceBook"><img src="~/img/facebook.png"/></a>
+			</div>
+			}
+		</div>
+</div>

@@ -8,7 +8,7 @@ namespace VizitkaOnline.AppData
         public DbSet<UserModel> UserModel { get; set; }
         public DbSet<AccountModel> AccountModel { get; set; }
         public ApplicationContext()
-        {          
+        {
             Database.EnsureCreated();
         }
         
