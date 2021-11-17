@@ -4,6 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
 using VizitkaOnline.AppData;
 using VizitkaOnline.Models;
 
@@ -100,14 +102,27 @@ namespace VizitkaOnline.Logic
         {
             if (postedFiles != null)
             {
-                string path = "/img/" + login + ".jpg";
-                using (var fileStream = new FileStream(_appEnvironment.WebRootPath + path, FileMode.Create))
+                string path = _appEnvironment.WebRootPath + "/img/" + login + ".jpg";
+                using (var fileStream = File.Create(path))
                 {
-                    postedFiles.CopyToAsync(fileStream);
+                   postedFiles.CopyTo(fileStream);
                 }
                 UpdateDB(login, GetAccountModel(login));
             }
         }
-
+        public static string Sha256Hash(string inputWord)
+        {
+            byte[] tempHash;
+            StringBuilder stringBuilder = new();
+            using (HashAlgorithm algorithm = SHA256.Create())
+            {
+                tempHash = algorithm.ComputeHash(Encoding.UTF8.GetBytes(inputWord));
+            }
+            foreach (var tempByte in tempHash)
+            {
+                stringBuilder.Append(tempByte.ToString("X2"));
+            }
+            return stringBuilder.ToString();
+        }
     }
 }

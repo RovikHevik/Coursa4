@@ -48,6 +48,17 @@ namespace VizitkaOnline
                 app.UseExceptionHandler("/Home/Error");
                 app.UseHsts();
             }
+
+            app.Use(async (context, next) =>
+            {
+                await next();
+                if (context.Response.StatusCode == 404)
+                {                    
+                    context.Request.Path = "/PageError/";
+                    await next();
+                }
+            });
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
@@ -57,6 +68,7 @@ namespace VizitkaOnline
             app.UseAuthorization();
 
             app.UseSession();
+          
 
             app.UseEndpoints(endpoints =>
             {
@@ -65,12 +77,7 @@ namespace VizitkaOnline
                     pattern: "{controller=Home}/{action=Index}/{id?}");
                 
             });
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllerRoute(
-                    name: "default",
-                    pattern: "{controller=User}/{action=UserCabiten}/{id?}");
-            });
+        
         }
     }
 }

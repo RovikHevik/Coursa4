@@ -1,71 +1,78 @@
 ﻿@model AccountModel
 @{
-    ViewData["Title"] = "Личный кабинет";
+ViewData["Title"] = "Личный кабинет";
+string url = $"{Context.Request.Scheme}://{Context.Request.Host}{Context.Request.PathBase}/user/get/{Model.Login}";
 }
-
-
- <div class="container justify-content-center align-items-center display-flex ">
-        <main role="main" class="pb-3 main-container-form">
-            <form asp-action="AddFile" asp-controller="User" method="post" enctype="multipart/form-data">
-                 <div class="form-group row justify-content-center py-auto">
-                       <div class="col-sm-6">
-                           <img src="@Model.UserPicture" onerror="this.onerror=null; this.src='/img/default_av.jpg'" width="200" class="img-fluid img-border-radius-10"/>
-                       </div>
-                        <div class="col-sm-6">
-                            <dl>
-                                <dt>
-                                    <label asp-for="Picture"></label>
-                                </dt>
-                                <dd>
-                                    <label class="custom-file-upload">
-                                        <input type="file" name="uploadedFile"/>
-                                        <i class="fa fa-cloud-upload"></i> Выбрать файл
-                                    </label>
-                                    <input type="submit" title="Обновить фото профиля" class="btn btn-primary"/>
-                                </dd>
-                            </dl>
-                        </div>
-                  </div>            
-            </form>
-            <form method="post" class="col-sm col-sm-pull" asp-action="UpdateAccountInfo" asp-controller="User">                 
-                  <div class="form-group row justify-content-center">                    
-                        <div class="col-sm-12">
-                          <input type="text" class="form-control" value="@Model.FullName" asp-for="FullName" id="inputEmail" placeholder="Имя">
-                        </div>
-                  </div>           
-                  <div class="form-group row justify-content-center">
-                    <label for="inputPassword" class="justify-content-center">Phone</label>
-                    <div class="col-sm-12">
-                      <input type="text" class="form-control" value="@Model.Phone" asp-for="Phone" id="inputPassword" placeholder="Вставьте ссылку">
+<div class="container justify-content-center align-items-center display-flex ">
+    <main role="main" class="pb-3 main-container-form">
+        <div class="row">
+            <div class="col-sm-6 mx-auto">
+                <label id="PublicUserLink" class="PublicUserLink">@url</label>
+                <button class="btn btn-success btn-copy" onclick="CopyToClipboard()">Нажми на меня, чтобы копировать ссылку на себя</button>
+            </div>
+        </div>
+        <form asp-action="AddFile" asp-controller="User" method="post" enctype="multipart/form-data" id="FileForm">
+            <div class="form-group row justify-content-center">
+                <div class="col-sm-6">
+                    <div class="row mt-5 justify-content-center"> 
+                        <label class="custom-file-upload">
+                        <input type="file" name="uploadedFile"  accept="image/jpeg" onchange="autoSubmit()">
+                         <img src="@Model.UserPicture" onerror="this.onerror=null; this.src='/img/default_av.jpg'" width="200" class="img-profile"/>
+                        <i class="fa fa-cloud-upload"></i>
+                        </label>
                     </div>
-                 </div>
-                    <div class="form-group row justify-content-center">
+                </div>
+            </div>
+        </form>
+        <form method="post" class="col-sm col-sm-pull" asp-action="UpdateAccountInfo" asp-controller="User">
+            <div class="form-group row justify-content-center">
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" value="@Model.FullName" asp-for="FullName" id="inputEmail" placeholder="Имя">
+                </div>
+            </div>
+            <div class="form-group row  justify-content-around">
+                <div class="col-sm-2">
+                    <label for="inputPassword" class="justify-content-center">Номер телефона</label>
+                </div>
+                <div class="col-sm-9">
+                    <input type="text" class="form-control" value="@Model.Phone" asp-for="Phone" id="inputPassword" placeholder="Вставьте ссылку">
+                </div>
+            </div>
+            <div class="form-group row  justify-content-around">
+                <div class="col-sm-2">
                     <label for="inputPassword" class="justify-content-center">Instagram</label>
-                    <div class="col-sm-12">
-                      <input type="text" class="form-control" value="@Model.Instagram" asp-for="Instagram" id="inputPassword" placeholder="Вставьте ссылку">
-                    </div>
-                 </div>
-                    <div class="form-group row justify-content-center">
+                </div>
+                <div class="col-sm-9">
+                    <input type="text" class="form-control" value="@Model.Instagram" asp-for="Instagram" id="inputPassword" placeholder="Вставьте ссылку">
+                </div>
+            </div>
+            <div class="form-group row  justify-content-around">
+                <div class="col-sm-2">
                     <label for="inputPassword" class="justify-content-center">Telegram</label>
-                    <div class="col-sm-12">
-                      <input type="text" class="form-control" value="@Model.Telegram" asp-for="Telegram" id="inputPassword" placeholder="Вставьте ссылку">
-                    </div>
-                 </div>
-                    <div class="form-group row justify-content-center">
+                </div>
+                <div class="col-sm-9">
+                    <input type="text" class="form-control" value="@Model.Telegram" asp-for="Telegram" id="inputPassword" placeholder="Вставьте ссылку">
+                </div>
+            </div>
+            <div class="form-group row justify-content-around">
+                <div class="col-sm-2">
                     <label for="inputPassword" class="justify-content-center">MonoBank</label>
-                    <div class="col-sm-12">
-                      <input type="text" class="form-control" value="@Model.Monobank" asp-for="Monobank" id="inputPassword" placeholder="Вставьте ссылку">
-                    </div>
-                 </div>
-                    <div class="form-group row justify-content-center">
+                </div>
+                <div class="col-sm-9">
+                    <input type="text" class="form-control" value="@Model.Monobank" asp-for="Monobank" id="inputPassword" placeholder="Вставьте ссылку">
+                </div>
+            </div>
+            <div class="form-group row  justify-content-around">
+                <div class="col-sm-2">
                     <label for="inputPassword" class="justify-content-center">Facebook</label>
-                    <div class="col-sm-12">
-                      <input type="text" class="form-control" value="@Model.FaceBook" asp-for="FaceBook" id="inputPassword" placeholder="Вставьте ссылку">
-                    </div>
-                 </div>
-                <div class="row">
-                    <button type="submit" class="btn btn-primary mx-auto">Сохранить</button>
-                </div>             
-            </form>
-        </main>
-    </div>
+                </div>
+                <div class="col-sm-9">
+                    <input type="text" class="form-control" value="@Model.FaceBook" asp-for="FaceBook" id="inputPassword" placeholder="Вставьте ссылку">
+                </div>
+            </div>
+            <div class="row">
+                <button type="submit" class="btn btn-primary mx-auto">Сохранить</button>
+            </div>
+        </form>
+    </main>
+</div>
