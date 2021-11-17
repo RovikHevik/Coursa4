@@ -73,9 +73,9 @@ namespace VizitkaOnline.Controllers
         public IActionResult Create(UserModel user)
         {
             
-            if (DataLogic.CheckNotNull(user) != "")
+            if (DataLogic.CheckRegisterData(user) != "")
             {
-                TempData["MessageErrorInput"] = DataLogic.CheckNotNull(user);
+                TempData["MessageErrorInput"] = DataLogic.CheckRegisterData(user);
                 return RedirectToAction("Registration", TempData);
             }
             DataLogic.WriteToDb(user);

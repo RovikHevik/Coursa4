@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.RegularExpressions;
 using VizitkaOnline.AppData;
 using VizitkaOnline.Models;
 
@@ -20,8 +21,9 @@ namespace VizitkaOnline.Logic
             return db.UserModel.Any(user => user.Login == model.Login);
         }
 
-        public static string CheckNotNull(UserModel model)
+        public static string CheckRegisterData(UserModel model)
         {
+            string pattern = @"\A(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)\Z";
             string result = "";
             using ApplicationContext db = new();
             if (model.Login == null || model.PasswordHash == null || model.Email == null || model.FirstName == null || model.LastName == null)
@@ -32,7 +34,10 @@ namespace VizitkaOnline.Logic
             {
                 result = "Данное имя занято, попробуйте другое";
             }
-
+            else if(!Regex.IsMatch(model.Email, pattern))
+            {
+                result = "Проверьте верность Email адресса";
+            }
             return result;
         }
 

@@ -12,24 +12,40 @@ ViewData["Title"] = @Model.FullName;
 		<img src="@Model.UserPicture"  onerror="this.onerror=null; this.src='/img/default_av.jpg'" width="200" class="vizit-avatar"/>
 	</div>
 	<div class="container main-link-container">
+		@if(Model.Phone != null)
+		{
+			<div class="row justify-content-center">
+			 <a href="tel:@Model.Phone">Нажми чтобы позвонить</a>
+			</div>
+		}
 		<div class="row justify-content-center">
 			 Ссылки на меня <img src="https://emojio.ru/images/apple-b/1f447.png" width="20px"/>
 		</div>
 		<div class="row justify-content-around">
-			<div class="col">
-				<a href="@Model.Telegram"><img src="~/img/telegram.png"/></a>
+			@if (Model.Telegram != null)
+			{
+				<div class="col-6">
+					<a href="@Model.Telegram"><img src="~/img/telegram.png"/></a>
 			</div>
-			<div class="col">
-				<a href="@Model.Instagram"><img src="~/img/instagram.png"/></a>
+			}
+			@if (Model.Instagram != null)
+			{
+				<div class="col-6">
+					<a href="@Model.Instagram"><img src="~/img/instagram.png"/></a>
 			</div>
+			}
+			@if (@Model.Monobank != null)
+			{
+
+				<div class="col-6">
+					<a href="@Model.Monobank"><img src="~/img/monobank.png"/></a>
+			</div>
+			}
+			@if (Model.FaceBook != null)
+			{
+				<div class="col-6">
+					<a href="@Model.FaceBook"><img src="~/img/facebook.png"/></a>
+			</div>
+			}
 		</div>
-		<div class="row justify-content-around">
-			<div class="col">
-				<a href="@Model.Monobank"><img src="~/img/monobank.png"/></a>
-			</div>
-			<div class="col">
-				<a href="@Model.FaceBook"><img src="~/img/facebook.png"/></a>
-			</div>
-		</div>
-	</div>
 </div>
