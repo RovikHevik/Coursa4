@@ -1,5 +1,57 @@
 ﻿@{
-    ViewData["Title"] = "О проекте";
+ViewData["Title"] = "О проекте";
 }
-
-<h1>Не, а че писать то... Ну курсач, ну проект</h1>
+<div class="container">
+   <div class="row justify-content-center">
+      <div class="h3">Хз че писать, поэтому раскажу про медведя</div>
+   </div>
+   <div class="row justify-content-center">
+      <div class="h4">Идет по лесу медведь. Видит - машина горит. Сел в нее и сгорел</div>
+   </div>
+   <div class="row justify-content-center">
+      <div id="accordion" role="tablist" aria-multiselectable="true">
+         <div class="card">
+            <div class="card-header" role="tab" id="headingOne">
+               <h5 class="mb-0">
+                  <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                  Версия анекдота &#8470;1
+                  </a>
+               </h5>
+            </div>
+            <div id="collapseOne" class="collapse" role="tabpanel" aria-labelledby="headingOne">
+               <div class="card-block">
+                  Идут по лесу три медведя: папа-медведь, мама-медведь и сынок-медведь. Сынок-медведь все время отстает. Папа-медведь ему говорит: «Не отставай, а то все горящие машины займут!» 
+               </div>
+            </div>
+         </div>
+         <div class="card">
+            <div class="card-header" role="tab" id="headingTwo">
+               <h5 class="mb-0">
+                  <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                  Версия анекдота &#8470;2
+                  </a>
+               </h5>
+            </div>
+            <div id="collapseTwo" class="collapse" role="tabpanel" aria-labelledby="headingTwo">
+               <div class="card-block">
+                  Идут по лесу два медведя. Видят - машина горит. Пока спорили и решали, кто из них в нее сядет, машина потухла… 
+               </div>
+            </div>
+         </div>
+         <div class="card">
+            <div class="card-header" role="tab" id="headingThree">
+               <h5 class="mb-0">
+                  <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                  Версия анекдота &#8470;3
+                  </a>
+               </h5>
+            </div>
+            <div id="collapseThree" class="collapse" role="tabpanel" aria-labelledby="headingThree">
+               <div class="card-block">
+                  Идет по лесу медведь. Видит - горят танк, электровоз, самолет, яхта и шаттл. «А где же машина?» - удивился медведь.               
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+</div>

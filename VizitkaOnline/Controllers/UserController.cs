@@ -37,7 +37,12 @@ namespace VizitkaOnline.Controllers
         [HttpGet("/user/get/{login}")]
         public IActionResult UserVizit(string login)
         {
-            return View(DataLogic.GetAccountModel(login));
+            AccountModel model = DataLogic.GetAccountModel(login);
+            if(model == null)
+            {
+                return Redirect($"{HttpContext.Request.PathBase.Value}/{login}") ;
+            }
+            return View(model);
         }
 
         /// <summary>
