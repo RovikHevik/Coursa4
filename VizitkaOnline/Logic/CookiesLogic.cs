@@ -1,6 +1,4 @@
 ﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using VizitkaOnline.Models;
 
 namespace VizitkaOnline.Logic
 {
@@ -26,6 +24,16 @@ namespace VizitkaOnline.Logic
         public static void SetCookies(HttpContext httpContext, string value, string key = "login")
         {           
             httpContext.Session.SetString(key, value);
+        }
+
+        /// <summary>
+        /// Метод удаления кукиса
+        /// </summary>
+        /// <param name="httpContext"> http context</param>
+        /// <param name="key"> ключ куки</param>
+        public static void DeleteCooikes(HttpContext httpContext, string key = "login")
+        {
+            httpContext.Session.Remove(key);
         }
     }
 }

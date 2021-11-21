@@ -162,3 +162,17 @@ input[type="file"] {
     border-radius: 10px;
     margin-bottom:5px;
 }
+.bg-light {
+    background-color: rgba(5, 5, 5, 1);
+}
+.card-block {
+    padding:1em;
+}
+#accordion{
+    min-width:100%;
+}
+@media (prefers-color-scheme:dark) {
+    .bg-light{
+        background-color:rgba(5, 5, 5, 1);
+    }
+}

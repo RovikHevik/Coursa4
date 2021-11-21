@@ -4,9 +4,14 @@ namespace VizitkaOnline.Controllers
 {
     public class PageErrorController : Controller
     {
-        public IActionResult Index()
+        /// <summary>
+        /// 404 error conroller
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet("/{page}")]
+        public IActionResult Index(string page)
         {
-            ViewBag.returnUrl = Request.Headers["Referer"].ToString();
+            ViewBag.returnUrl = page;
             return View();
         }
     }
