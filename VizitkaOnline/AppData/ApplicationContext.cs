@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using VizitkaOnline.DontGit;
 using VizitkaOnline.Models;
 
 namespace VizitkaOnline.AppData
