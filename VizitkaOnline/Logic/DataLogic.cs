@@ -1,10 +1,13 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using VizitkaOnline.AppData;
 using VizitkaOnline.Models;
 
@@ -112,6 +115,33 @@ namespace VizitkaOnline.Logic
                 }
                 UpdateDB(login, GetAccountModel(login));
             }
+        }
+
+        public static async Task<object> GetFullDataAsync(string login)
+        {
+            using ApplicationContext db = new();
+            object result = null;
+            if(await db.UserModel.Where(u => u.Login == login).FirstAsync() != null && await db.AccountModel.Where(u => u.Login == login).FirstAsync() != null)
+            {
+                result = (from user in db.UserModel.Where(u => u.Login == login).DefaultIfEmpty()
+                          from account in db.AccountModel.Where(a => a.Login == login).DefaultIfEmpty()
+                          select new
+                          {
+                              Id = user.id,
+                              Name = user.FirstName,
+                              LastName = user.LastName,
+                              ShowName = account.FullName,
+                              PasswordHash = user.PasswordHash,
+                              Email = user.Email,
+                              facebook = account.FaceBook,
+                              monobank = account.Monobank,
+                              Telegram = account.Telegram,
+                              Instagram = account.Instagram,
+                              Phone = account.Phone,
+                              PictureLink = account.Picture
+                          }).First();
+            }
+            return result;
         }
         public static string Sha256Hash(string inputWord)
         {

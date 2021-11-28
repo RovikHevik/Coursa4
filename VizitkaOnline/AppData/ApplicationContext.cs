@@ -17,5 +17,9 @@ namespace VizitkaOnline.AppData
         {
             optionsBuilder.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=WorkTempBd;Trusted_Connection=True;");
         }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<UserModel>().HasNoKey();
+        }
     }
 }

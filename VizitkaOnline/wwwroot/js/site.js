@@ -1,6 +1,17 @@
 ﻿function CopyToClipboard() {
     var copyText = document.getElementById("PublicUserLink");
     navigator.clipboard.writeText(copyText.textContent);
+    var notify = document.getElementById("notify");
+    notify.classList.add("active");
+    var notyfiType = document.getElementById("notifyType");
+    notyfiType.classList.add("success");
+    notyfiType.textContent = "Копирование прошло успешно!";
+
+    setTimeout(() => {
+        notyfiType.classList.remove("success");
+        notify.classList.remove("active");
+        notyfiType.textContent = "";
+    }, 3000);
 }
 
 function autoSubmit() {
@@ -15,3 +26,4 @@ window.onload = () => {
         document.body.classList.remove('loaded_hiding');
     }, 500);
 }
+
