@@ -68,7 +68,11 @@ namespace VizitkaOnline.Controllers
             return View(DataLogic.GetAccountModel(login));
         }
 
-
+        public IActionResult LogOut()
+        {
+            CookiesLogic.DeleteCookies(HttpContext);
+            return LocalRedirect("~/");
+        }
         /// <summary>
         /// Метод для создания юзера
         /// </summary>

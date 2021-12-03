@@ -15,18 +15,32 @@ namespace VizitkaOnline.Controllers
         {
             return JsonSerializer.Serialize(DataLogic.GetUserModel(login));
         }
+        //Api получение информации
+        [HttpGet("/api/Delete/{id}/{password}")]
+        public string DeleteUser(int id, string password)
+        {
+            if (DataLogic.DeleteFromDB(id, password).Result == true)
+            {
+                return "ok";
+            }
+            else
+            {
+                return "error";
+            }
+        }
 
-        [HttpGet("/api/getUserFull/{login}")]
-        public string FullApiUser(string login)
+        [HttpGet("/api/getUserFull/{login}/{password}")]
+        public string FullApiUser(string login, string password)
         {
             try
             {
-                return JsonSerializer.Serialize(DataLogic.GetFullDataAsync(login).Result);
+                return JsonSerializer.Serialize(DataLogic.GetFullData(login, DataLogic.Sha256Hash(password)));
             }        
             catch (Exception)
             {
                 return JsonSerializer.Serialize("Not found user");
             }
         }
+
     }
 }

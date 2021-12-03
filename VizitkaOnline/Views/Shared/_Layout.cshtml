@@ -50,8 +50,17 @@
                         {
                              <ul class="navbar-nav flex-grow-3">
                                 <li class="nav-item">
-                                    <a class="nav-link text-dark" href="/User/UserCabinet">@CookiesLogic.GetCookies(Context)</a>
+                                    <a class="nav-link text-dark" href="/User/UserCabinet">Личный кабинет(@CookiesLogic.GetCookies(Context))</a>
                                 </li>
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" href="/User/LogOut">Выйти</a>
+                                </li>
+                                @if(CookiesLogic.GetCookies(Context) == "Admin")
+                                {
+                                 <li class="nav-item">
+                                    <a class="nav-link text-dark" href="/Admin/AdminPanel">Поадминить</a>
+                                </li> 
+                                }
                             </ul>
                         }      
                     }                   

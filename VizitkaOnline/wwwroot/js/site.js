@@ -18,7 +18,7 @@ function autoSubmit() {
     document.getElementById("FileForm").submit();
 }
 
-// грузим картинки только после загрузки сайта
+// preloader
 window.onload = () => {
     document.body.classList.add('loaded_hiding');
     window.setTimeout(function () {

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -21,6 +22,13 @@ namespace VizitkaOnline.Logic
             using ApplicationContext db = new();
             return db.UserModel.Any(user => user.Login == model.Login);
         }
+        public static bool IsExistsUser(string login, string password)
+        {
+            using ApplicationContext db = new();
+            bool result = db.UserModel.Where(user => user.Login == login).First().PasswordHash.Contains(password);
+            return result;
+        }
+
 
         public static string CheckRegisterData(UserModel model)
         {
@@ -68,6 +76,11 @@ namespace VizitkaOnline.Logic
             using ApplicationContext db = new();
             return db.UserModel.Where(ac => ac.Login == login).FirstOrDefault();
         }
+        public static UserModel GetUserModel(int id)
+        {
+            using ApplicationContext db = new();
+            return db.UserModel.Where(ac => ac.id == id).FirstOrDefault();
+        }
 
         public async static void UpdateDB(string login, AccountModel model)
         {
@@ -104,6 +117,30 @@ namespace VizitkaOnline.Logic
             db.AccountModel.Add(model);
             await db.SaveChangesAsync();
         }
+
+        public static async Task<bool> DeleteFromDB(int id, string password)
+        {
+          try
+            {
+                using ApplicationContext db = new();
+                if(GetUserModel(id).PasswordHash.Contains(password))
+                {
+                    db.UserModel.Remove(db.UserModel.Where(u => u.id == id).First());
+                    db.AccountModel.Remove(db.AccountModel.Where(u => u.id == id).First());
+                }
+                else
+                {
+                    return false;
+                }
+                await db.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
         public static void SaveImage(IFormFile postedFiles, string login, IWebHostEnvironment _appEnvironment)
         {
             if (postedFiles != null)
@@ -117,11 +154,11 @@ namespace VizitkaOnline.Logic
             }
         }
 
-        public static async Task<object> GetFullDataAsync(string login)
+        public static object GetFullData(string login, string password)
         {
             using ApplicationContext db = new();
             object result = null;
-            if(await db.UserModel.Where(u => u.Login == login).FirstAsync() != null && await db.AccountModel.Where(u => u.Login == login).FirstAsync() != null)
+            if (IsExistsUser(login, password))
             {
                 result = (from user in db.UserModel.Where(u => u.Login == login).DefaultIfEmpty()
                           from account in db.AccountModel.Where(a => a.Login == login).DefaultIfEmpty()
@@ -138,11 +175,19 @@ namespace VizitkaOnline.Logic
                               Telegram = account.Telegram,
                               Instagram = account.Instagram,
                               Phone = account.Phone,
-                              PictureLink = account.Picture
+                              PictureLink = account.Picture,
+                              DebugPass = Sha256Hash(password)
                           }).First();
-            }
+            }  
             return result;
         }
+
+        public static List<UserModel> GetAllUser()
+        {
+            using ApplicationContext db = new();
+            var result = db.UserModel.ToList();
+            return result;
+    }
         public static string Sha256Hash(string inputWord)
         {
             byte[] tempHash;

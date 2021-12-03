@@ -1,0 +1,31 @@
+﻿@model List<UserModel>;
+
+<script src="/js/Query.js"></script>
+<table border="1" class="table table-dark">
+   <caption>Таблица UserModel</caption>
+    <thead>
+           <tr>
+            <th>Id</th>
+            <th>Login</th>
+            <th>FirstName</th>
+            <th>LastName</th>
+            <th>PasswordHash</th>
+            <th>Email</th>
+           </tr>
+       </thead>
+       <tbody>
+      @foreach(var item in Model){
+          <tr>
+              <td>@item.id</td>
+              <td>@item.Login</td>
+              <td>@item.FirstName</td>
+              <td>@item.LastName</td>
+              <td>@item.PasswordHash</td>
+              <td>@item.Email</td>
+              <td>
+                  <button onclick="DeleteById(@item.id, '@item.PasswordHash')" class="btn btn-danger">Удалить пользователя</button>
+              </td>
+          </tr>
+      }
+      </tbody>
+  </table>
